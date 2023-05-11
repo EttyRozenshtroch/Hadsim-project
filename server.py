@@ -6,7 +6,7 @@ app = Flask(__name__)
 select_all_query="SELECT *FROM Employees JOIN CoronaDetails ON CoronaDetails.IDNumber = Employees.IDNumber JOIN People_Vaccinations ON People_Vaccinations.EmployeeID = Employees.IDNumber JOIN Vaccines ON Vaccines.VaccineID = People_Vaccinations.VaccinationID;"
 select_employys_query="SELECT *FROM Employees"
 
-def fetch_data_from_sql(query):
+def fetch_data_from_sql(query): #שליפת נתונים מSQL
     conn = pyodbc.connect(conn_str)
     cursor = conn.cursor()
     try:
@@ -24,24 +24,26 @@ def fetch_data_from_sql(query):
     print(rows_list)
     return rows_list
 #
-# def fetch_column_from_sql(query,ID):
-#     conn = pyodbc.connect(conn_str)
-#     cursor = conn.cursor()
-#     try:
-#         cursor.execute(query, ID)
-#         results = cursor.fetchall()
-#         for row in results:
-#             print(row)
-#         cursor.execute(query)
-#
-#     except:
-#         return False
-#     finally:
-#         cursor.close()
-#         conn.close()
-#
+def fetch_column_from_sql(query,ID):
+    conn = pyodbc.connect(conn_str)
+    cursor = conn.cursor()
+    try:
+        cursor.execute(query, ID)
+        results = cursor.fetchall()
+        aaaa=[]
+        for row in results:
+            ########
+            print(row)
+        cursor.execute(query)
 
-@app.route('/Employees', methods=['GET'])
+    except:
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+
+
+@app.route('/Employees', methods=['GET']) #קבלת כל הנתונים מSQL
 def get_employees():
     data=fetch_data_from_sql(select_employys_query)
     rows_list = []
